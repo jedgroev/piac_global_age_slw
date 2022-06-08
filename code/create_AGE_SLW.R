@@ -42,23 +42,16 @@ for(i in 1:length(looper)){
   p_k <- list.files(p,recursive=TRUE, pattern='.ASC') # list tiles 
   p_k_looper <- p_k[grep(pattern = paste0('^',looper[i],'.*'), p_k)] # subset latitude
   p_k <- gsub(paste0('^',looper[i],'/'),paste0('+',looper[i],'/'), p_k_looper) # replace when + is missing
-   
-  # p_m30 <- p_k[grep(pattern = '^90.*', p_k)]
-  # p_p30 <- p_k[grep(pattern = '^-90.*', p_k)]
-  # p_k <- c(p_m30,p_p30)
-  # p_k <- gsub('^90/','+90/', p_k)
   p_k_l <- split(p_k,f=substr(p_k,1,11)) # split by longitude
   seacurve_path_l <- lapply(p_k_l, function(x) paste0(p,gsub('\\+','',x))) # list path names 
   
-  # SET PATH TO SEA CURVE DIRECTORY 
-  #setwd('/Users/jedgroev/TEMP/AGE/AGE/')
   # CREATE DROWNING AGE RASTERS FOR A CERTAIN LATITUDE 
   parallel::mclapply(seacurve_path_l, function(x) agemap(r=r, seacurve=x, res_fact = 8, to_path=to_path),mc.cores = 4)
   # in case of missing tiles
   seacurve_all <- gsub('/','-',names(seacurve_path_l))
   seacurve_done <- gsub('.asc','',gsub('AGE','',list.files(pattern='.asc$',recursive = T)))
   seacurve_path_missing_l <- seacurve_path_l[c(!seacurve_all %in% seacurve_done)]
-  parallel::mclapply(seacurve_path_missing_l, function(x) agemap(r=r, seacurve=x, res_fact = 8),mc.cores = 4)
+  parallel::mclapply(seacurve_path_missing_l, function(x) agemap(r=r, seacurve=x, res_fact = 8, to_path=to_path),mc.cores = 4)
   print(i)
 }
 
@@ -89,15 +82,9 @@ for(i in 1:length(looper)){
   p_from <- p_k
   p_k_looper <- p_k[grep(pattern = paste0('^',looper[i],'.*'), p_k)] # subset latitude
   p_k <- gsub(paste0('^',looper[i],'/'),paste0('+',looper[i],'/'), p_k_looper) # replace when + is missing
-  
-  # p_m30 <- p_k[grep(pattern = '^90.*', p_k)]
-  # p_p30 <- p_k[grep(pattern = '^-90.*', p_k)]
-  # p_k <- c(p_m30,p_p30)
-  # p_k <- gsub('^90/','+90/', p_k)
   p_k_l <- split(p_k,f=substr(p_k,1,11)) # split by longitude
   seacurve_path_l <- lapply(p_k_l, function(x) paste0(p,gsub('\\+','',x))) # list path names 
-  #shallow_path_l <- lapply(p_k_l, function(x) paste0(t,gsub('\\+','',x))) # list path names 
-  #setwd(to_path)
+  
   # CREATE SHALLOW WATER RASTER FOR A CERTAIN LATITUDE 
   parallel::mclapply(seacurve_path_l, function(x) scialla(r=r, seacurve=x, res_fact = 8, shallow=shallow, to_path=to_path),mc.cores = 4)
   print(paste0(looper[i], ' exported'))
