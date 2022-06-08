@@ -1,40 +1,48 @@
-#### 1. SETTINGS ####
-to_path <- '/Volumes/Extreme SSD/TEMP/' # specify the root path where the datasets (AGE/SLW) will be generated (example external drive)
+---
+title: "create_age_slw"
+author: "Johannes De Groeve"
+date: "6/8/2022"
+output: html_document
+---
 
-#### 2. PACKAGES ####
+### 1. SETTINGS
+```{R eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, include = TRUE, results='hide'}
+to_path <- '/Volumes/Extreme SSD/TEMP/' # specify the root path where the datasets (AGE/SLW) will be generated (example external drive)
+```
+
+### 2. PACKAGES 
+```{R eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, include = TRUE, results='hide'}
 library(readr);library(parallel)
 library(tidyr);library(stringr);library(dplyr)
 library(raster);library(gdalUtils);library(rgdal);library(terra);library(sf);library(smoothr)
+```
 
-#### 3. FUNCTIONS ####
-fncs <- list.files('./code/fncs/',full.names = T)
+#### 3. FUNCTIONS
+```{R eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE, include = TRUE, results='hide'}
+fncs <- list.files('./fncs',full.names = T)
 lapply(fncs,source)
+```
 
-#### 4. DOWNLOAD DATA ####
+#### 4. DOWNLOAD DATA
 
-#### 4.1. GEBCO ####
-download_link_gebco(dataset='gebco_2021')
-
-#### 4.2. SEA LEVEL CURVE ####
-
-# Contact corresponding author for access to the spatiotemporal sea level curve. 
+Download link of [GEBCO 2021](https://www.bodc.ac.uk/data/open_download/gebco/gebco_2021/zip/) and the [Spatio-temporal Sea Level Curve](https://uvaauas.figshare.com/account/articles/20029991). To obtain access to the curve please contact Johannes De Groeve (maintainer of repository). 
 
 #### 5. IMPORT DATA ####
-
-#GEBCO_PATH <- '~/Downloads/GEBCO_2019.nc' 
+```{R eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE, include = TRUE}
 gebco_path <- '~/Downloads/GEBCO_2021.nc' # GEBCO path - modify if path is different
-curve_path <- '~/Downloads/FIGSHAREPATH/STSLC/' # SEACURVE path - modify if path is different
+curve_path <- '~/Downloads/RSL_tiles/' # SEACURVE path - modify if path is different
 
 # 2021
 p_r <- gebco_path  # '/Volumes/Extreme SSD/TEMP/gebco_2021/GEBCO_2021.nc'
 r <- terra::rast(p_r) %>% raster()
 proj4string(r) <- "+proj=longlat +datum=WGS84"
+```
 
-#### 6. CREATE AGE MAP ####
-
+#### 6. CREATE AGE MAP
+```{R eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE, include = TRUE, results='hide'}
 # LIST SEACURVE PATHS 
 looper <- seq(0,90,10)
-looper <- unique(c(looper,-looper))
+looper <- unique(c(looper,-looper)) 
 
 for(i in 1:length(looper)){
   # set path to sea level curve tiles 
@@ -42,23 +50,16 @@ for(i in 1:length(looper)){
   p_k <- list.files(p,recursive=TRUE, pattern='.ASC') # list tiles 
   p_k_looper <- p_k[grep(pattern = paste0('^',looper[i],'.*'), p_k)] # subset latitude
   p_k <- gsub(paste0('^',looper[i],'/'),paste0('+',looper[i],'/'), p_k_looper) # replace when + is missing
-   
-  # p_m30 <- p_k[grep(pattern = '^90.*', p_k)]
-  # p_p30 <- p_k[grep(pattern = '^-90.*', p_k)]
-  # p_k <- c(p_m30,p_p30)
-  # p_k <- gsub('^90/','+90/', p_k)
   p_k_l <- split(p_k,f=substr(p_k,1,11)) # split by longitude
   seacurve_path_l <- lapply(p_k_l, function(x) paste0(p,gsub('\\+','',x))) # list path names 
   
-  # SET PATH TO SEA CURVE DIRECTORY 
-  #setwd('/Users/jedgroev/TEMP/AGE/AGE/')
   # CREATE DROWNING AGE RASTERS FOR A CERTAIN LATITUDE 
   parallel::mclapply(seacurve_path_l, function(x) agemap(r=r, seacurve=x, res_fact = 8, to_path=to_path),mc.cores = 4)
   # in case of missing tiles
   seacurve_all <- gsub('/','-',names(seacurve_path_l))
   seacurve_done <- gsub('.asc','',gsub('AGE','',list.files(pattern='.asc$',recursive = T)))
   seacurve_path_missing_l <- seacurve_path_l[c(!seacurve_all %in% seacurve_done)]
-  parallel::mclapply(seacurve_path_missing_l, function(x) agemap(r=r, seacurve=x, res_fact = 8),mc.cores = 4)
+  parallel::mclapply(seacurve_path_missing_l, function(x) agemap(r=r, seacurve=x, res_fact = 8, to_path=to_path),mc.cores = 4)
   print(i)
 }
 
@@ -75,8 +76,10 @@ writeRaster(template, file="AGE.tif", format="GTiff")
 # mosaic the raster
 mosaic_rasters(gdalfile=p_age,dst_dataset="AGE.tif",of="GTiff")
 gdalinfo("AGE.tif")
+```
 
-#### 7. CREATE CUMULATIVE SEA SHELF MAPS ####
+#### 7. CREATE CUMULATIVE SEA SHELF MAPS 
+```{R eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE, include = TRUE, results='hide'}
 shallow <- 140
 looper <- seq(0,90,10)
 looper <- unique(c(looper,-looper)) 
@@ -89,15 +92,9 @@ for(i in 1:length(looper)){
   p_from <- p_k
   p_k_looper <- p_k[grep(pattern = paste0('^',looper[i],'.*'), p_k)] # subset latitude
   p_k <- gsub(paste0('^',looper[i],'/'),paste0('+',looper[i],'/'), p_k_looper) # replace when + is missing
-  
-  # p_m30 <- p_k[grep(pattern = '^90.*', p_k)]
-  # p_p30 <- p_k[grep(pattern = '^-90.*', p_k)]
-  # p_k <- c(p_m30,p_p30)
-  # p_k <- gsub('^90/','+90/', p_k)
   p_k_l <- split(p_k,f=substr(p_k,1,11)) # split by longitude
   seacurve_path_l <- lapply(p_k_l, function(x) paste0(p,gsub('\\+','',x))) # list path names 
-  #shallow_path_l <- lapply(p_k_l, function(x) paste0(t,gsub('\\+','',x))) # list path names 
-  #setwd(to_path)
+
   # CREATE SHALLOW WATER RASTER FOR A CERTAIN LATITUDE 
   parallel::mclapply(seacurve_path_l, function(x) scialla(r=r, seacurve=x, res_fact = 8, shallow=shallow, to_path=to_path),mc.cores = 4)
   print(paste0(looper[i], ' exported'))
@@ -146,8 +143,10 @@ for(i in 1:length(f_l)){
   writeRaster(r_l, filename=paste0('./SLW_global/',f_l[i]),overwrite=T)
 }
 #lapply(f_l, function(x) file.remove(x))
+```
 
-#### EXTRA: CONVERT TO ISOCHRONES ####
+#### EXTRA: CONVERT AGE TO ISOCHRONES 
+```{R eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE, include = TRUE, results='hide'}
 r <- rast('AGE.tif')
 
 # isochrone polygons smoothing
@@ -157,3 +156,5 @@ cdi_p <- sf::st_as_sf(p) %>% smoothr::smooth(method = "ksmooth", smoothness = 1)
 # isochrone lines smoothing
 l <- as.lines(p)
 cdi_l <- sf::st_as_sf(l) %>% smoothr::smooth(method = "ksmooth", smoothness = 1) # fast!
+
+```
