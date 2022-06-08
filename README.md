@@ -6,13 +6,14 @@ Repository with functions and scripts to generate global coastline age raster (A
 
 For the bathymetry we used the General Bathymetric Chart of the Oceans ([GEBCO 2019](https://www.gebco.net/data_and_products/historical_data_sets/#gebco_2019) / [GEBCO 2021](https://www.gebco.net/data_and_products/gridded_bathymetry_data/)).  
 
+**Table:** Download links for different GEBCO versions
+
 | version         |  description          |              comments                    |
 |:---------------:|:---------------------:|:----------------------------------------:|
 | [GEBCO 2019](https://www.bodc.ac.uk/data/open_download/gebco/GEBCO_15SEC/zip/) | ice surface elevation | SLW and AGE available in Figshare repository; <br /> Figures in manuscript based on GEBCO 2019 |
 | [GEBCO 2020](https://www.bodc.ac.uk/data/open_download/gebco/gebco_2020/zip/) | ice surface elevation | Not used in manuscript |
 | [GEBCO 2021](https://www.bodc.ac.uk/data/open_download/gebco/gebco_2021/zip/) | ice surface elevation | SLW and AGE available in Figshare repository |
 | [GEBCO 2021](https://www.bodc.ac.uk/data/open_download/gebco/gebco_2021_sub_ice_topo/zip/) | sub-ice topo/bathy | Not used in manuscript |
-: **Table:** Download links for different GEBCO versions
 
 # Spatio-temporal sea level curve (RSL)
 
@@ -22,10 +23,11 @@ The spatio-temporal relative sea level curve (RSL) was developed using the softw
 
 Clone or download the repository. The script [create_AGE_SLW.R](https://github.com/jedgroev/piac_global_age_slw/blob/main/code/create_AGE_SLW.R) loads the required functions and generates the AGE and SLW dataset using a GEBCO model. Make sure to specify the settings including: 
 
+**Table:** Settings 
+
 | setting         |  description          |
 |:---------------:|:---------------------:|
 | **to_path** | path where to save the AGE and SLW rasters |
 | **gebco_path** | path of the gebco raster |
 | **curve_path** | path of the spatiotemporal sea level curve (RSL) |
-: **Table:** Settings 
 
