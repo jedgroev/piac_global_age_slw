@@ -25,8 +25,7 @@ Download link of [GEBCO
 2021](https://www.bodc.ac.uk/data/open_download/gebco/gebco_2021/zip/)
 and the [Spatio-temporal Sea Level
 Curve](https://uvaauas.figshare.com/account/articles/20029991). To
-obtain access to the curve please contact Johannes De Groeve (maintainer
-of repository).
+obtain access to the curve please contact Johannes De Groeve.
 
 #### 5. IMPORT DATA
 
