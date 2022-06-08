@@ -16,6 +16,7 @@ lapply(fncs,source)
 download_link_gebco(dataset='gebco_2021')
 
 #### 4.2. SEA LEVEL CURVE ####
+download_link_rsl()
 
 # Contact corresponding author for access to the spatiotemporal sea level curve. 
 
