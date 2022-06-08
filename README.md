@@ -21,7 +21,7 @@ The spatio-temporal relative sea level curve (RSL) was developed using the softw
 
 # INSTRUCTIONS
 
-Clone or download the repository. The script [create_AGE_SLW.R](https://github.com/jedgroev/piac_global_age_slw/blob/main/code/create_AGE_SLW.R) loads the required functions and generates the AGE and SLW dataset using a GEBCO model. Make sure to specify the settings including: 
+Clone or [download](https://github.com/jedgroev/piac_global_age_slw/archive/refs/heads/main.zip) the repository. The script [create_AGE_SLW.R](https://github.com/jedgroev/piac_global_age_slw/blob/main/code/create_AGE_SLW.R) loads the required functions and generates the AGE and SLW dataset using a GEBCO model. Make sure to specify the settings including: 
 
 **Table:** Settings 
 
