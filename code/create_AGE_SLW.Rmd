@@ -2,7 +2,9 @@
 title: "create_age_slw"
 author: "Johannes De Groeve"
 date: "6/8/2022"
-output: html_document
+output: 
+  md_document:
+    variant: markdown_github
 ---
 
 ### 1. SETTINGS

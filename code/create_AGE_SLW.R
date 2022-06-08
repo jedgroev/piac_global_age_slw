@@ -23,7 +23,7 @@ download_link_gebco(dataset='gebco_2021')
 
 #GEBCO_PATH <- '~/Downloads/GEBCO_2019.nc' 
 gebco_path <- '~/Downloads/GEBCO_2021.nc' # GEBCO path - modify if path is different
-curve_path <- '~/Downloads/FIGSHAREPATH/STSLC/' # SEACURVE path - modify if path is different
+curve_path <- '~/Downloads/RSL_tiles/' # SEACURVE path - modify if path is different
 
 # 2021
 p_r <- gebco_path  # '/Volumes/Extreme SSD/TEMP/gebco_2021/GEBCO_2021.nc'
