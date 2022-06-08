@@ -1,4 +1,4 @@
-#' @title download_gebco
+#' @title download_link_gebco
 #' 
 #' @author Johannes De Groeve
 #' @description return the download link of the global bathymetry for three reference years (2019,2020,2021).
@@ -30,3 +30,4 @@ download_link_gebco <- function(dataset=c('gebco_2021','gebco_2021_sub_ice_topo'
   }
   print(paste0('copy this link in your browser to download the dataset: ', url))
 } 
+
