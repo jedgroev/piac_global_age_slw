@@ -17,7 +17,7 @@ For the bathymetry we used the General Bathymetric Chart of the Oceans ([GEBCO 2
 
 # 2. Spatio-temporal sea level curve (RSL)
 
-The spatio-temporal relative sea level curve (RSL) was developed using the software [SELEN4](https://zenodo.org/record/3520451), [ICE-5G (VM2)](https://pmip2.lsce.ipsl.fr/design/ice5g/) and [DEMSRE3a](https://zenodo.org/record/1637816) derived from the public domain. The output model is available in [Figshare](https://uvaauas.figshare.com/account/articles/20029991). To obtain access please contact Johannes De Groeve (maintainer of repository).
+The spatio-temporal relative sea level curve (RSL) was developed using the software [SELEN4](https://zenodo.org/record/3520451), [ICE-5G (VM2)](https://pmip2.lsce.ipsl.fr/design/ice5g/) and [DEMSRE3a](https://zenodo.org/record/1637816) derived from the public domain. The output model is available in [Figshare](https://uvaauas.figshare.com/account/articles/20029991). To obtain access please contact Johannes De Groeve.
 
 # INSTRUCTIONS
 
